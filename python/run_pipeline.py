@@ -11,4 +11,7 @@ subprocess.run(["python3", "python/transform_customers.py"], check=True)
 print("\n3. Creating customer analytics...")
 subprocess.run(["python3", "python/create_customer_analytics.py"], check=True)
 
+print("\n4. Validating customer data...")
+subprocess.run(["python3", "python/validate_customers.py"], check=True)
+
 print("\nPipeline completed successfully!")
