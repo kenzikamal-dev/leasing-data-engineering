@@ -1,0 +1,6 @@
+customer_id,customer_name,province,city,industry
+CUS001,ABC Construction,Ontario,Toronto,Construction
+CUS002,Maple Transport Inc.,Quebec,Montreal,Transportation
+CUS003,Northern Tech Solutions,Ontario,Ottawa,Technology
+CUS004,Prairie Healthcare,Alberta,Calgary,Healthcare
+CUS005,Pacific Manufacturing,British Columbia,Vancouver,Manufacturing
