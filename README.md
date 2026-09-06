@@ -1,202 +1,462 @@
-# Leasing Data Engineering Project
+# Leasing Data Engineering Pipeline
+
+A portfolio Data Engineering project that demonstrates how leasing finance data can be stored in MySQL, extracted with Python, transformed into clean datasets, and prepared for analytics.
 
 ## Business Problem
 
-ABC Leasing Finance needs a reliable data system to organize
-customer, leasing contract, equipment, and payment data.
+Leasing companies manage large amounts of customer, contract, equipment, and payment data.
 
-The company wants to use this data to understand its leasing
-portfolio and answer important business questions.
+This project simulates a leasing finance data environment and demonstrates how operational data can be transformed into structured, analytics-ready datasets.
 
-## Project Objective
+The pipeline focuses on:
 
-Build a leasing finance data pipeline that stores, cleans,
-transforms, and prepares data for analytics.
+* Customer information
+* Leasing contracts
+* Financed equipment
+* Payment transactions
+* Portfolio analysis
 
-## Main Business Entities
+## Project Objectives
 
-- Customer
-- Leasing Contract
-- Equipment
-- Payment
+The main objectives of this project are to:
 
-## Data Entities and Attributes
+* Build a relational leasing database using MySQL
+* Extract operational data using Python
+* Transform and clean raw datasets
+* Create analytics-ready datasets
+* Apply SQL for portfolio analysis
+* Build an automated ETL pipeline
+* Use Git and GitHub for version control
+* Apply basic data security practices
 
-### Customer
+## Architecture
 
-- customer_id
-- customer_name
-- province
-- city
-- industry
+The project follows a simple ETL architecture:
 
-### Contract
+```text
+                    ┌──────────────────┐
+                    │   MySQL Database │
+                    │                  │
+                    │ Customers        │
+                    │ Contracts        │
+                    │ Equipment        │
+                    │ Payments         │
+                    └────────┬─────────┘
+                             │
+                             │ Extract
+                             ▼
+                    ┌──────────────────┐
+                    │      Python      │
+                    │                  │
+                    │ mysql-connector  │
+                    └────────┬─────────┘
+                             │
+                             │ Transform
+                             ▼
+                    ┌──────────────────┐
+                    │   Clean Dataset  │
+                    │                  │
+                    │ CSV / Processed  │
+                    └────────┬─────────┘
+                             │
+                             │ Analytics
+                             ▼
+                    ┌──────────────────┐
+                    │ Analytics Output │
+                    │                  │
+                    │ Customer Summary │
+                    └──────────────────┘
+```
 
-- contract_id
-- customer_id
-- contract_date
-- amount_financed
-- term_months
-- interest_rate
-- status
+### Data Flow
 
-### Equipment
+```text
+MySQL Database
+      ↓
+Extract
+      ↓
+Raw CSV
+      ↓
+Transform & Clean
+      ↓
+Processed CSV
+      ↓
+Analytics
+      ↓
+Analytics Dataset
+```
 
-- equipment_id
-- contract_id
-- equipment_type
-- description
-- equipment_value
+## Technologies Used
 
-### Payment
+| Technology             | Purpose                                         |
+| ---------------------- | ----------------------------------------------- |
+| MySQL                  | Relational database and data storage            |
+| SQL                    | Data analysis and portfolio queries             |
+| Python                 | Data extraction, transformation, and automation |
+| CSV                    | Raw and processed data exchange                 |
+| mysql-connector-python | Python-to-MySQL connectivity                    |
+| python-dotenv          | Environment variable management                 |
+| Git                    | Version control                                 |
+| GitHub                 | Source code repository and portfolio            |
+| VS Code                | Development environment                         |
 
-- payment_id
-- contract_id
-- payment_date
-- payment_amount
-- payment_status
+## Database Structure
 
-## Keys and Relationships
+The project uses a relational MySQL database called:
 
-### Primary Keys
+```text
+leasing_data_engineering
+```
 
-- customers.customer_id
-- contracts.contract_id
-- equipment.equipment_id
-- payments.payment_id
-
-### Foreign Keys
-
-- contracts.customer_id → customers.customer_id
-- equipment.contract_id → contracts.contract_id
-- payments.contract_id → contracts.contract_id
-
-
-
-## Business Questions
-
-- How many leasing contracts do we have?
-- How many contracts are active?
-- How much equipment has been financed?
-- How much has customers paid?
-- What is the outstanding balance?
-- Which customers have the largest contracts?
-- Which province has the largest leasing portfolio?
-
-## Sample Data Scope
+The database contains four main tables.
 
 ### Customers
 
-Business customers from different industries:
+Stores customer information:
 
-- Construction
-- Transportation
-- Technology
-- Healthcare
-- Manufacturing
+* Customer ID
+* Customer name
+* Province
+* City
+* Industry
 
 ### Contracts
 
-Leasing contracts with:
+Stores leasing contract information:
 
-- Contract date
-- Amount financed
-- Term
-- Interest rate
-- Status
-
-Possible statuses:
-
-- Active
-- Paid Off
-- Defaulted
+* Contract ID
+* Customer ID
+* Contract date
+* Amount financed
+* Term in months
+* Interest rate
+* Contract status
 
 ### Equipment
 
-Examples:
+Stores information about financed equipment:
 
-- Excavator
-- Forklift
-- Delivery Truck
-- Server
-- Medical Equipment
-- Manufacturing Machine
+* Equipment ID
+* Contract ID
+* Equipment type
+* Description
+* Equipment value
 
 ### Payments
 
-Each leasing contract can have multiple payments.
+Stores payment transaction information:
 
-Payment information includes:
+* Payment ID
+* Contract ID
+* Payment date
+* Payment amount
+* Payment status
 
-- Payment date
-- Payment amount
-- Payment status
+### Relationships
 
-### Provinces
+```text
+Customers
+    │
+    │ 1-to-many
+    ▼
+Contracts
+    │
+    ├──────────────► Equipment
+    │
+    └──────────────► Payments
+```
 
-- Ontario
-- Quebec
-- Alberta
-- British Columbia
+Primary and foreign keys are used to maintain relationships between the tables and preserve data integrity.
 
-## Database Tables
+## Business Questions
 
-### customers
+The project uses SQL and Python to answer business questions such as:
 
-Stores information about leasing customers.
+* How many leasing contracts are in the portfolio?
+* How many contracts are active?
+* How much has been financed?
+* How much has customers paid?
+* What is the estimated outstanding balance?
+* Which customers have the largest contracts?
+* Which provinces have the largest leasing exposure?
+* Which contracts are defaulted?
+* What is the payment activity by month?
 
-### contracts
+## ETL Pipeline
 
-| Column | Data Type | Key | Description |
-|---|---|---|---|
-| contract_id | VARCHAR(10) | PK | Unique leasing contract identifier |
-| customer_id | VARCHAR(10) | FK | Customer associated with the contract |
-| contract_date | DATE | | Contract start date |
-| amount_financed | DECIMAL(12,2) | | Amount financed |
-| term_months | INT | | Contract term in months |
-| interest_rate | DECIMAL(5,2) | | Annual interest rate (%) |
-| status | VARCHAR(20) | | Contract status |
+The project implements a Python-based ETL pipeline.
 
-### contracts
+### 1. Extract
 
-Stores information about leasing contracts.
+Python connects to the MySQL database and extracts customer data.
 
-### equipment
+The extracted data is saved as:
 
-Stores information about financed equipment.
+```text
+data/raw/customers.csv
+```
 
-### equipment
+### 2. Transform
 
-| Column | Data Type | Key | Description |
-|---|---|---|---|
-| equipment_id | VARCHAR(10) | PK | Unique equipment identifier |
-| contract_id | VARCHAR(10) | FK | Contract financing the equipment |
-| equipment_type | VARCHAR(50) | | Equipment category |
-| description | VARCHAR(100) | | Equipment description |
-| equipment_value | DECIMAL(12,2) | | Value of the equipment |
+The raw customer data is read and cleaned using Python.
 
-### payments
+The transformation process includes:
 
-Stores information about customer payments.
+* Removing unnecessary whitespace
+* Cleaning text fields
+* Preserving the required data structure
 
-### payments
+The cleaned dataset is saved as:
 
-| Column | Data Type | Key | Description |
-|---|---|---|---|
-| payment_id | VARCHAR(10) | PK | Unique payment identifier |
-| contract_id | VARCHAR(10) | FK | Contract associated with the payment |
-| payment_date | DATE | | Date payment was made |
-| payment_amount | DECIMAL(12,2) | | Payment amount |
-| payment_status | VARCHAR(20) | | Payment status |
+```text
+data/processed/customers_clean.csv
+```
 
-## Table Design
+### 3. Analytics
 
-### customers
+The processed dataset is analyzed using Python.
 
-| Column | Data Type | Key | Description |
-|---|---|---|---|
-| customer_id | VARCHAR(10) | PK | Unique customer identifier |
-| customer_name | VARCHAR(100) | | Customer/company name |
-| province | VARCHAR(50) | | Customer province |
-| city | VARCHAR(50) | | Customer city |
-| industry | VARCHAR(50) | | Customer industry |
+A customer summary dataset is generated by province:
+
+```text
+data/analytics/customer_summary.csv
+```
+
+### 4. Pipeline Automation
+
+The complete pipeline can be executed with:
+
+```bash
+python3 python/run_pipeline.py
+```
+
+The pipeline executes:
+
+```text
+Extract
+   ↓
+Transform
+   ↓
+Analytics
+```
+
+## SQL Analysis
+
+SQL is used to analyze the leasing portfolio and generate business insights.
+
+The project demonstrates:
+
+* `SELECT`
+* `WHERE`
+* `ORDER BY`
+* `JOIN`
+* `LEFT JOIN`
+* `GROUP BY`
+* `CASE`
+* `SUM()`
+* `COUNT()`
+* `RANK()`
+* `ROW_NUMBER()`
+* `PARTITION BY`
+* Common Table Expressions (CTEs)
+* Views
+* Data aggregation
+* Portfolio analysis
+* Payment analysis
+* Default analysis
+
+Example:
+
+```sql
+SELECT
+    status,
+    COUNT(*) AS contract_count,
+    SUM(amount_financed) AS total_financed
+FROM contracts
+GROUP BY status;
+```
+
+## Python Project Structure
+
+```text
+python/
+├── test_mysql_connection.py
+├── extract_customers.py
+├── extract_customers_to_csv.py
+├── transform_customers.py
+├── create_customer_analytics.py
+└── run_pipeline.py
+```
+
+### Script Responsibilities
+
+| Script                         | Responsibility                             |
+| ------------------------------ | ------------------------------------------ |
+| `test_mysql_connection.py`     | Tests the MySQL database connection        |
+| `extract_customers.py`         | Extracts customer records from MySQL       |
+| `extract_customers_to_csv.py`  | Extracts customer data and saves it as CSV |
+| `transform_customers.py`       | Cleans and transforms customer data        |
+| `create_customer_analytics.py` | Creates the customer analytics dataset     |
+| `run_pipeline.py`              | Orchestrates the complete ETL workflow     |
+
+## Data Structure
+
+```text
+leasing-data-engineering/
+│
+├── data/
+│   ├── raw/
+│   │   └── customers.csv
+│   │
+│   ├── processed/
+│   │   └── customers_clean.csv
+│   │
+│   └── analytics/
+│       └── customer_summary.csv
+│
+├── python/
+│   ├── test_mysql_connection.py
+│   ├── extract_customers.py
+│   ├── extract_customers_to_csv.py
+│   ├── transform_customers.py
+│   ├── create_customer_analytics.py
+│   └── run_pipeline.py
+│
+├── .gitignore
+├── .env
+└── README.md
+```
+
+> `.env` is intentionally excluded from GitHub and should never be committed.
+
+## Data Security
+
+Database credentials are not stored directly in the Python source code.
+
+The project uses environment variables through a `.env` file:
+
+```text
+MYSQL_HOST
+MYSQL_PORT
+MYSQL_USER
+MYSQL_PASSWORD
+MYSQL_DATABASE
+```
+
+The `.env` file is excluded from Git using `.gitignore`.
+
+This helps prevent database credentials from being accidentally committed to the GitHub repository.
+
+The `.gitignore` file also excludes:
+
+```text
+.env
+__pycache__/
+*.pyc
+.DS_Store
+```
+
+## How to Run the Project
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/kenzikamal-dev/leasing-data-engineering.git
+cd leasing-data-engineering
+```
+
+### 2. Configure Environment Variables
+
+Create the `.env` file from the terminal:
+
+```bash
+cat > .env <<'EOF'
+MYSQL_HOST=localhost
+MYSQL_PORT=3306
+MYSQL_USER=root
+MYSQL_PASSWORD=your_password
+MYSQL_DATABASE=leasing_data_engineering
+EOF
+```
+
+Replace `your_password` with your local MySQL password.
+
+Verify the file:
+
+```bash
+ls -la .env
+```
+
+### 3. Verify Python Dependencies
+
+Check Python:
+
+```bash
+python3 --version
+```
+
+Verify the required packages:
+
+```bash
+python3 -c "import mysql.connector; import dotenv; print('Python dependencies are installed successfully!')"
+```
+
+Expected output:
+
+```text
+Python dependencies are installed successfully!
+```
+
+### 4. Test the MySQL Connection
+
+```bash
+python3 python/test_mysql_connection.py
+```
+
+Expected output:
+
+```text
+MySQL connection successful!
+```
+
+### 5. Run the Complete ETL Pipeline
+
+```bash
+python3 python/run_pipeline.py
+```
+
+Expected final output:
+
+```text
+Pipeline completed successfully!
+```
+
+## Project Status
+
+Current implementation includes:
+
+* MySQL relational database
+* Customer, contract, equipment, and payment data
+* SQL portfolio analysis
+* Python data extraction
+* Data transformation
+* Analytics dataset creation
+* Automated ETL pipeline
+* Environment-based credential management
+* Git version control
+* GitHub repository
+
+## Future Improvements
+
+Planned improvements include:
+
+* Expand the pipeline to extract all database tables
+* Add data quality validation
+* Add logging and error handling
+* Introduce Apache Airflow for orchestration
+* Add PySpark for large-scale data processing
+* Build a data warehouse model
+* Add Power BI dashboards
+* Add automated testing
+* Containerize the pipeline with Docker
+* Deploy the pipeline to a cloud environment
