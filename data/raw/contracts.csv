@@ -1,0 +1,6 @@
+contract_id,customer_id,contract_date,amount_financed,term_months,interest_rate,status
+CON001,CUS001,2026-01-15,85000.00,60,6.50,Active
+CON002,CUS002,2026-02-10,120000.00,48,7.25,Active
+CON003,CUS003,2026-02-20,45000.00,36,5.75,Active
+CON004,CUS004,2025-06-12,65000.00,60,6.00,Paid Off
+CON005,CUS005,2025-09-05,150000.00,72,7.50,Defaulted

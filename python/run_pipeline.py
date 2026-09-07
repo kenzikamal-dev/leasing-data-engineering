@@ -10,6 +10,11 @@ logging.basicConfig(
 print("Starting leasing data pipeline...")
 logging.info("Pipeline started")
 
+
+# ============================================================
+# 1. EXTRACT DATA
+# ============================================================
+
 try:
     print("\n1. Extracting customer data...")
     logging.info("Starting customer data extraction")
@@ -21,12 +26,26 @@ try:
 
     logging.info("Customer data extraction completed")
 
+    print("\n1.1 Extracting contract data...")
+    logging.info("Starting contract data extraction")
+
+    subprocess.run(
+        ["python3", "python/extract_contracts_to_csv.py"],
+        check=True
+    )
+
+    logging.info("Contract data extraction completed")
+
 except subprocess.CalledProcessError as error:
-    logging.error(f"Customer data extraction failed: {error}")
-    print("Customer data extraction FAILED")
+    logging.error(f"Data extraction failed: {error}")
+    print("Data extraction FAILED")
     logging.error("Pipeline failed during extraction")
     raise
 
+
+# ============================================================
+# 2. TRANSFORM DATA
+# ============================================================
 
 try:
     print("\n2. Transforming customer data...")
@@ -39,12 +58,26 @@ try:
 
     logging.info("Customer data transformation completed")
 
+    print("\n2.1 Transforming contract data...")
+    logging.info("Starting contract data transformation")
+
+    subprocess.run(
+        ["python3", "python/transform_contracts.py"],
+        check=True
+    )
+
+    logging.info("Contract data transformation completed")
+
 except subprocess.CalledProcessError as error:
-    logging.error(f"Customer data transformation failed: {error}")
-    print("Customer data transformation FAILED")
+    logging.error(f"Data transformation failed: {error}")
+    print("Data transformation FAILED")
     logging.error("Pipeline failed during transformation")
     raise
 
+
+# ============================================================
+# 3. CREATE ANALYTICS
+# ============================================================
 
 try:
     print("\n3. Creating customer analytics...")
@@ -64,23 +97,31 @@ except subprocess.CalledProcessError as error:
     raise
 
 
+# ============================================================
+# 4. DATA QUALITY VALIDATION
+# ============================================================
+
 try:
     print("\n4. Validating customer data...")
-    logging.info("Starting data quality validation")
+    logging.info("Starting customer data quality validation")
 
     subprocess.run(
         ["python3", "python/validate_customers.py"],
         check=True
     )
 
-    logging.info("Data quality validation completed")
+    logging.info("Customer data quality validation completed")
 
 except subprocess.CalledProcessError as error:
-    logging.error(f"Data quality validation failed: {error}")
-    print("Data quality validation FAILED")
+    logging.error(f"Customer data validation failed: {error}")
+    print("Customer data validation FAILED")
     logging.error("Pipeline failed during data validation")
     raise
 
+
+# ============================================================
+# PIPELINE COMPLETE
+# ============================================================
 
 print("\nPipeline completed successfully!")
 logging.info("Pipeline completed successfully")
