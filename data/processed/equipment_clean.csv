@@ -1,0 +1,6 @@
+equipment_id,contract_id,equipment_type,description,equipment_value
+EQ001,CON001,Excavator,CAT Hydraulic Excavator,85000.00
+EQ002,CON002,Delivery Truck,Freightliner Delivery Truck,120000.00
+EQ003,CON003,Server,Dell Enterprise Server,45000.00
+EQ004,CON004,Medical Equipment,MRI Diagnostic Equipment,65000.00
+EQ005,CON005,Manufacturing Machine,CNC Manufacturing Machine,150000.00

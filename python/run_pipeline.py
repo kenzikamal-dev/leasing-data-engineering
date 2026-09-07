@@ -36,6 +36,16 @@ try:
 
     logging.info("Contract data extraction completed")
 
+    print("\n1.2 Extracting equipment data...")
+    logging.info("Starting equipment data extraction")
+
+    subprocess.run(
+        ["python3", "python/extract_equipment_to_csv.py"],
+        check=True
+    )
+
+    logging.info("Equipment data extraction completed")
+
 except subprocess.CalledProcessError as error:
     logging.error(f"Data extraction failed: {error}")
     print("Data extraction FAILED")
@@ -67,6 +77,16 @@ try:
     )
 
     logging.info("Contract data transformation completed")
+
+    print("\n2.2 Transforming equipment data...")
+    logging.info("Starting equipment data transformation")
+
+    subprocess.run(
+        ["python3", "python/transform_equipment.py"],
+        check=True
+    )
+
+    logging.info("Equipment data transformation completed")
 
 except subprocess.CalledProcessError as error:
     logging.error(f"Data transformation failed: {error}")
@@ -112,9 +132,19 @@ try:
 
     logging.info("Customer data quality validation completed")
 
+    print("\n4.1 Validating equipment data...")
+    logging.info("Starting equipment data quality validation")
+
+    subprocess.run(
+        ["python3", "python/validate_equipment.py"],
+        check=True
+    )
+
+    logging.info("Equipment data quality validation completed")
+
 except subprocess.CalledProcessError as error:
-    logging.error(f"Customer data validation failed: {error}")
-    print("Customer data validation FAILED")
+    logging.error(f"Data validation failed: {error}")
+    print("Data validation FAILED")
     logging.error("Pipeline failed during data validation")
     raise
 
