@@ -46,6 +46,16 @@ try:
 
     logging.info("Equipment data extraction completed")
 
+    print("\n1.3 Extracting payment data...")
+    logging.info("Starting payment data extraction")
+
+    subprocess.run(
+        ["python3", "python/extract_payments_to_csv.py"],
+        check=True
+    )
+
+    logging.info("Payment data extraction completed")
+
 except subprocess.CalledProcessError as error:
     logging.error(f"Data extraction failed: {error}")
     print("Data extraction FAILED")
@@ -87,6 +97,16 @@ try:
     )
 
     logging.info("Equipment data transformation completed")
+
+    print("\n2.3 Transforming payment data...")
+    logging.info("Starting payment data transformation")
+
+    subprocess.run(
+        ["python3", "python/transform_payments.py"],
+        check=True
+    )
+
+    logging.info("Payment data transformation completed")
 
 except subprocess.CalledProcessError as error:
     logging.error(f"Data transformation failed: {error}")
@@ -151,6 +171,16 @@ try:
     )
 
     logging.info("Equipment data quality validation completed")
+
+    print("\n4.3 Validating payment data...")
+    logging.info("Starting payment data quality validation")
+
+    subprocess.run(
+        ["python3", "python/validate_payments.py"],
+        check=True
+    )
+
+    logging.info("Payment data quality validation completed")
 
 except subprocess.CalledProcessError as error:
     logging.error(f"Data validation failed: {error}")
