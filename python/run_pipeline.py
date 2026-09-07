@@ -132,7 +132,17 @@ try:
 
     logging.info("Customer data quality validation completed")
 
-    print("\n4.1 Validating equipment data...")
+    print("\n4.1 Validating contract data...")
+    logging.info("Starting contract data quality validation")
+
+    subprocess.run(
+        ["python3", "python/validate_contracts.py"],
+        check=True
+    )
+
+    logging.info("Contract data quality validation completed")
+
+    print("\n4.2 Validating equipment data...")
     logging.info("Starting equipment data quality validation")
 
     subprocess.run(
